@@ -23,16 +23,6 @@ function fuzzyMatch(needle: string, haystack: string): boolean {
   return h.startsWith(prefix) || h.includes(prefix);
 }
 
-function findOrgKR(orgObjectives: OrgObjective[], label: string): string | null {
-  const cleaned = label.replace(/^Org KR:\s*/i, '').trim();
-  for (const obj of orgObjectives) {
-    for (const kr of obj.keyResults) {
-      if (fuzzyMatch(cleaned, kr.title)) return kr.id;
-    }
-  }
-  return null;
-}
-
 function findTeamKR(teams: Team[], label: string, teamName?: string): string | null {
   const cleaned = label.replace(/^Team KR:\s*/i, '').trim();
   const teamsToSearch = teamName
@@ -140,6 +130,7 @@ export function parseOKRText(text: string): OKRData {
           id: genId('team-obj'),
           teamId: currentTeam.id,
           title: objMatch[1].trim(),
+          linkedOrgKRIds: [],
           keyResults: [],
         };
         currentTeam.objectives.push(currentObjective as TeamObjective);
@@ -161,33 +152,22 @@ export function parseOKRText(text: string): OKRData {
         };
         (currentObjective as OrgObjective).keyResults.push(kr);
       } else if (currentSection === 'team' && currentObjective && currentTeam) {
-        let linkedOrgKRId: string | null = null;
-        if (linkRef) {
-          linkedOrgKRId = findOrgKR(orgObjectives, linkRef);
-        }
         const kr: TeamKeyResult = {
           id: genId('team-kr'),
           objectiveId: currentObjective.id,
           teamId: currentTeam.id,
           title: krTitle,
-          linkedOrgKRId,
         };
         (currentObjective as TeamObjective).keyResults.push(kr);
       } else if (currentSection === 'individual' && currentIndividual) {
         let linkedTeamKRId: string | null = null;
-        let linkedOrgKRId: string | null = null;
 
         if (linkRef) {
           if (linkRef.toLowerCase().startsWith('team kr:')) {
             linkedTeamKRId = findTeamKR(teams, linkRef, currentTeamName);
-          } else if (linkRef.toLowerCase().startsWith('org kr:')) {
-            linkedOrgKRId = findOrgKR(orgObjectives, linkRef);
           } else {
-            // Try team first, then org
+            // Try to match against team KRs
             linkedTeamKRId = findTeamKR(teams, linkRef, currentTeamName);
-            if (!linkedTeamKRId) {
-              linkedOrgKRId = findOrgKR(orgObjectives, linkRef);
-            }
           }
         }
 
@@ -198,7 +178,6 @@ export function parseOKRText(text: string): OKRData {
           period: currentPeriod,
           year: currentYear,
           linkedTeamKRId,
-          linkedOrgKRId,
         };
         currentIndividual.keyResults.push(kr);
       }

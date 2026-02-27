@@ -40,13 +40,13 @@ export default function HierarchyTree() {
         type: 'org-objective',
         id: obj.id,
         children: obj.keyResults.map((kr) => {
-          // Find teams linked to this org KR
+          // Find teams linked to this org KR via team objectives
           const linkedTeams: TreeNode[] = [];
           for (const team of data.teams) {
             if (filters.selectedTeams.length > 0 && !filters.selectedTeams.includes(team.id)) continue;
             for (const tobj of team.objectives) {
-              for (const tkr of tobj.keyResults) {
-                if (tkr.linkedOrgKRId === kr.id) {
+              if (tobj.linkedOrgKRIds.includes(kr.id)) {
+                for (const tkr of tobj.keyResults) {
                   // Find individuals linked to this team KR
                   const linkedPeople: TreeNode[] = [];
                   for (const person of data.individuals) {

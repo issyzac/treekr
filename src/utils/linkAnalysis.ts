@@ -48,6 +48,13 @@ export function buildGraph(data: OKRData): AnalysisResult {
         connectionCount: 0,
       });
 
+      // Link team objective → org KRs
+      for (const orgKRId of obj.linkedOrgKRIds) {
+        links.push({ source: obj.id, target: orgKRId, type: 'org-to-team', relationship: 'contribution' });
+        incConnection(obj.id);
+        incConnection(orgKRId);
+      }
+
       for (const kr of obj.keyResults) {
         nodes.push({
           id: kr.id,
@@ -60,12 +67,6 @@ export function buildGraph(data: OKRData): AnalysisResult {
         links.push({ source: obj.id, target: kr.id, type: 'org-to-team', relationship: 'ownership' });
         incConnection(obj.id);
         incConnection(kr.id);
-
-        if (kr.linkedOrgKRId) {
-          links.push({ source: kr.id, target: kr.linkedOrgKRId, type: 'org-to-team', relationship: 'contribution' });
-          incConnection(kr.id);
-          incConnection(kr.linkedOrgKRId);
-        }
       }
     }
   }
@@ -104,11 +105,6 @@ export function buildGraph(data: OKRData): AnalysisResult {
         incConnection(kr.id);
         incConnection(kr.linkedTeamKRId);
       }
-      if (kr.linkedOrgKRId) {
-        links.push({ source: kr.id, target: kr.linkedOrgKRId, type: 'org-to-individual', relationship: 'contribution' });
-        incConnection(kr.id);
-        incConnection(kr.linkedOrgKRId);
-      }
     }
   }
 
@@ -141,19 +137,13 @@ export function getContributionMatrix(data: OKRData): {
     for (const orgKR of orgKRs) {
       let count = 0;
       for (const ikr of person.keyResults) {
-        // Direct link to org KR
-        if (ikr.linkedOrgKRId === orgKR.id) {
-          count++;
-          continue;
-        }
-        // Indirect: ikr -> team KR -> org KR
+        // Indirect: individual KR -> team KR -> team objective -> org KR
         if (ikr.linkedTeamKRId) {
           for (const team of data.teams) {
             for (const tobj of team.objectives) {
-              for (const tkr of tobj.keyResults) {
-                if (tkr.id === ikr.linkedTeamKRId && tkr.linkedOrgKRId === orgKR.id) {
-                  count++;
-                }
+              const hasTeamKR = tobj.keyResults.some((tkr) => tkr.id === ikr.linkedTeamKRId);
+              if (hasTeamKR && tobj.linkedOrgKRIds.includes(orgKR.id)) {
+                count++;
               }
             }
           }
@@ -186,8 +176,9 @@ export function getSankeyData(data: OKRData): {
     for (const obj of team.objectives) {
       for (const kr of obj.keyResults) {
         nodes.push({ id: kr.id, label: kr.title, layer: 1, teamId: team.id });
-        if (kr.linkedOrgKRId) {
-          const key = `${kr.id}->${kr.linkedOrgKRId}`;
+        // Link team KR to org KRs via the parent objective's linkedOrgKRIds
+        for (const orgKRId of obj.linkedOrgKRIds) {
+          const key = `${kr.id}->${orgKRId}`;
           linkMap[key] = (linkMap[key] || 0) + 1;
         }
       }

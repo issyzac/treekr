@@ -68,7 +68,6 @@ export default function OKREditorModal() {
 
     // ── Step 3 state ─────────────────────────────────────────────────────────
     const [krTitle, setKrTitle] = useState('');
-    const [linkedOrgKRId, setLinkedOrgKRId] = useState('');
     const [linkedTeamKRId, setLinkedTeamKRId] = useState('');
     const [krPeriod, setKrPeriod] = useState<'H1' | 'H2'>('H1');
     const [krYear, setKrYear] = useState(2026);
@@ -95,7 +94,6 @@ export default function OKREditorModal() {
         setSelectedObjectiveId('');
         setNewObjectiveTitle('');
         setKrTitle('');
-        setLinkedOrgKRId('');
         setLinkedTeamKRId('');
         setKrPeriod('H1');
         setKrYear(2026);
@@ -146,13 +144,6 @@ export default function OKREditorModal() {
             }))
         );
     })();
-
-    // All org KRs (for linking in team or individual KR)
-    const allOrgKRs = data.orgObjectives.flatMap((obj) =>
-        obj.keyResults.map((kr) => ({ id: kr.id, title: kr.title, objectiveTitle: obj.title }))
-    );
-
-
 
     // ── Validation ────────────────────────────────────────────────────────────
 
@@ -277,7 +268,6 @@ export default function OKREditorModal() {
             objectiveId,
             teamId,
             title: krTitle.trim(),
-            linkedOrgKRId: linkedOrgKRId || null,
         };
         dispatch({ type: 'ADD_TEAM_KR', payload: { teamId, objectiveId, kr } });
     }
@@ -305,7 +295,6 @@ export default function OKREditorModal() {
             period: krPeriod,
             year: krYear,
             linkedTeamKRId: linkedTeamKRId || null,
-            linkedOrgKRId: linkedOrgKRId || null,
         };
         dispatch({ type: 'ADD_INDIVIDUAL_KR', payload: { individualId, kr } });
     }
@@ -514,28 +503,7 @@ export default function OKREditorModal() {
                 onChange={(e) => setKrTitle(e.target.value)}
             />
 
-            {/* Org KR: no linkage */}
-            {/* Team KR: link to Org KR */}
-            {entityType === 'team' && (
-                <>
-                    {sectionLabel('Links to Org KR (optional)')}
-                    <select
-                        id={`${baseId}-link-org-kr`}
-                        className="editor-select"
-                        value={linkedOrgKRId}
-                        onChange={(e) => setLinkedOrgKRId(e.target.value)}
-                    >
-                        <option value="">— none —</option>
-                        {allOrgKRs.map((kr) => (
-                            <option key={kr.id} value={kr.id}>
-                                [{kr.objectiveTitle.slice(0, 40)}…] {kr.title.slice(0, 60)}…
-                            </option>
-                        ))}
-                    </select>
-                </>
-            )}
-
-            {/* Individual KR: link to Team KR + optional Org KR */}
+            {/* Individual KR: link to Team KR */}
             {entityType === 'individual' && (
                 <>
                     {sectionLabel('Links to Team KR (optional)')}
@@ -549,21 +517,6 @@ export default function OKREditorModal() {
                         {teamKRsForLinking.map((kr) => (
                             <option key={kr.id} value={kr.id}>
                                 [{kr.objectiveTitle.slice(0, 30)}…] {kr.title.slice(0, 55)}…
-                            </option>
-                        ))}
-                    </select>
-
-                    {sectionLabel('Also links to Org KR (optional)')}
-                    <select
-                        id={`${baseId}-link-org-kr-ind`}
-                        className="editor-select"
-                        value={linkedOrgKRId}
-                        onChange={(e) => setLinkedOrgKRId(e.target.value)}
-                    >
-                        <option value="">— none —</option>
-                        {allOrgKRs.map((kr) => (
-                            <option key={kr.id} value={kr.id}>
-                                [{kr.objectiveTitle.slice(0, 40)}…] {kr.title.slice(0, 60)}…
                             </option>
                         ))}
                     </select>

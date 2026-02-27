@@ -42,9 +42,6 @@ export const sampleData: OKRData = {
           teamId: 'team-ke',
           title: 'Strengthen primary healthcare in Kenya',
           keyResults: [
-            { id: 'team-ke-kr-1', objectiveId: 'team-ke-obj-1', teamId: 'team-ke', title: 'Open 10 new health centers in underserved counties', linkedOrgKRId: 'org-kr-3' },
-            { id: 'team-ke-kr-2', objectiveId: 'team-ke-obj-1', teamId: 'team-ke', title: 'Train 200 CHWs in rural areas', linkedOrgKRId: 'org-kr-2' },
-            { id: 'team-ke-kr-3', objectiveId: 'team-ke-obj-1', teamId: 'team-ke', title: 'Reduce maternal mortality by 25% in target counties', linkedOrgKRId: 'org-kr-1' },
           ],
         },
       ],
@@ -59,9 +56,6 @@ export const sampleData: OKRData = {
           teamId: 'team-tz',
           title: 'Expand community health services in Tanzania',
           keyResults: [
-            { id: 'team-tz-kr-1', objectiveId: 'team-tz-obj-1', teamId: 'team-tz', title: 'Deploy 150 CHWs in 5 regions', linkedOrgKRId: 'org-kr-2' },
-            { id: 'team-tz-kr-2', objectiveId: 'team-tz-obj-1', teamId: 'team-tz', title: 'Establish 20 community health posts', linkedOrgKRId: 'org-kr-3' },
-            { id: 'team-tz-kr-3', objectiveId: 'team-tz-obj-1', teamId: 'team-tz', title: 'Reduce maternal mortality by 15% in pilot districts', linkedOrgKRId: 'org-kr-1' },
           ],
         },
       ],
@@ -76,10 +70,6 @@ export const sampleData: OKRData = {
           teamId: 'team-tech',
           title: 'Build and deploy digital health solutions',
           keyResults: [
-            { id: 'team-tech-kr-1', objectiveId: 'team-tech-obj-1', teamId: 'team-tech', title: 'Deploy EMR in 15 Kenya facilities', linkedOrgKRId: 'org-kr-4' },
-            { id: 'team-tech-kr-2', objectiveId: 'team-tech-obj-1', teamId: 'team-tech', title: 'Deploy EMR in 15 Tanzania facilities', linkedOrgKRId: 'org-kr-4' },
-            { id: 'team-tech-kr-3', objectiveId: 'team-tech-obj-1', teamId: 'team-tech', title: 'Achieve 80% data compliance across all sites', linkedOrgKRId: 'org-kr-5' },
-            { id: 'team-tech-kr-4', objectiveId: 'team-tech-obj-1', teamId: 'team-tech', title: 'Launch telemedicine pilot in 5 districts', linkedOrgKRId: 'org-kr-6' },
           ],
         },
       ],
@@ -94,9 +84,6 @@ export const sampleData: OKRData = {
           teamId: 'team-ops',
           title: 'Ensure organizational growth and sustainability',
           keyResults: [
-            { id: 'team-ops-kr-1', objectiveId: 'team-ops-obj-1', teamId: 'team-ops', title: 'Secure 3 new multi-year grants', linkedOrgKRId: 'org-kr-7' },
-            { id: 'team-ops-kr-2', objectiveId: 'team-ops-obj-1', teamId: 'team-ops', title: 'Maintain 90%+ staff retention', linkedOrgKRId: 'org-kr-8' },
-            { id: 'team-ops-kr-3', objectiveId: 'team-ops-obj-1', teamId: 'team-ops', title: 'Publish 5 impact research papers', linkedOrgKRId: 'org-kr-9' },
           ],
         },
       ],
@@ -111,9 +98,6 @@ export const sampleData: OKRData = {
       teamId: 'team-ke',
       role: 'Program Manager',
       keyResults: [
-        { id: 'ind-1-kr-1', individualId: 'ind-1', title: 'Establish partnerships with 3 county health departments', period: 'H1', year: 2025, linkedTeamKRId: 'team-ke-kr-1', linkedOrgKRId: null },
-        { id: 'ind-1-kr-2', individualId: 'ind-1', title: 'Complete site assessments for 10 health center locations', period: 'H1', year: 2025, linkedTeamKRId: 'team-ke-kr-1', linkedOrgKRId: null },
-        { id: 'ind-1-kr-3', individualId: 'ind-1', title: 'Develop maternal health intervention protocol', period: 'H1', year: 2025, linkedTeamKRId: 'team-ke-kr-3', linkedOrgKRId: null },
       ],
     },
     {
@@ -122,9 +106,6 @@ export const sampleData: OKRData = {
       teamId: 'team-ke',
       role: 'Training Coordinator',
       keyResults: [
-        { id: 'ind-2-kr-1', individualId: 'ind-2', title: 'Develop CHW training curriculum for Kenya context', period: 'H1', year: 2025, linkedTeamKRId: 'team-ke-kr-2', linkedOrgKRId: null },
-        { id: 'ind-2-kr-2', individualId: 'ind-2', title: 'Train first cohort of 100 CHWs', period: 'H1', year: 2025, linkedTeamKRId: 'team-ke-kr-2', linkedOrgKRId: null },
-        { id: 'ind-2-kr-3', individualId: 'ind-2', title: 'Establish CHW supervision framework', period: 'H2', year: 2025, linkedTeamKRId: 'team-ke-kr-2', linkedOrgKRId: null },
       ],
     },
     // Tanzania Health team
@@ -134,9 +115,6 @@ export const sampleData: OKRData = {
       teamId: 'team-tz',
       role: 'Country Director',
       keyResults: [
-        { id: 'ind-3-kr-1', individualId: 'ind-3', title: 'Recruit and onboard 75 CHWs in 3 regions', period: 'H1', year: 2025, linkedTeamKRId: 'team-tz-kr-1', linkedOrgKRId: null },
-        { id: 'ind-3-kr-2', individualId: 'ind-3', title: 'Secure government approval for 10 health posts', period: 'H1', year: 2025, linkedTeamKRId: 'team-tz-kr-2', linkedOrgKRId: null },
-        { id: 'ind-3-kr-3', individualId: 'ind-3', title: 'Launch maternal health program in 3 pilot districts', period: 'H1', year: 2025, linkedTeamKRId: 'team-tz-kr-3', linkedOrgKRId: null },
       ],
     },
     {
@@ -145,9 +123,6 @@ export const sampleData: OKRData = {
       teamId: 'team-tz',
       role: 'Field Operations Lead',
       keyResults: [
-        { id: 'ind-4-kr-1', individualId: 'ind-4', title: 'Recruit and onboard 75 CHWs in 2 remaining regions', period: 'H2', year: 2025, linkedTeamKRId: 'team-tz-kr-1', linkedOrgKRId: null },
-        { id: 'ind-4-kr-2', individualId: 'ind-4', title: 'Build 10 community health posts', period: 'H2', year: 2025, linkedTeamKRId: 'team-tz-kr-2', linkedOrgKRId: null },
-        { id: 'ind-4-kr-3', individualId: 'ind-4', title: 'Establish supply chain for CHW medical kits', period: 'H1', year: 2025, linkedTeamKRId: 'team-tz-kr-1', linkedOrgKRId: null },
       ],
     },
     // Digital Health team
@@ -157,9 +132,6 @@ export const sampleData: OKRData = {
       teamId: 'team-tech',
       role: 'Software Engineer',
       keyResults: [
-        { id: 'ind-5-kr-1', individualId: 'ind-5', title: 'Customize EMR modules for Kenya facility requirements', period: 'H1', year: 2025, linkedTeamKRId: 'team-tech-kr-1', linkedOrgKRId: null },
-        { id: 'ind-5-kr-2', individualId: 'ind-5', title: 'Build telemedicine video consultation feature', period: 'H1', year: 2025, linkedTeamKRId: 'team-tech-kr-4', linkedOrgKRId: null },
-        { id: 'ind-5-kr-3', individualId: 'ind-5', title: 'Implement data sync for offline-first EMR', period: 'H2', year: 2025, linkedTeamKRId: 'team-tech-kr-3', linkedOrgKRId: null },
       ],
     },
     {
@@ -168,9 +140,6 @@ export const sampleData: OKRData = {
       teamId: 'team-tech',
       role: 'Systems Administrator',
       keyResults: [
-        { id: 'ind-6-kr-1', individualId: 'ind-6', title: 'Deploy and configure EMR in 15 Tanzania facilities', period: 'H1', year: 2025, linkedTeamKRId: 'team-tech-kr-2', linkedOrgKRId: null },
-        { id: 'ind-6-kr-2', individualId: 'ind-6', title: 'Set up data reporting dashboards for all sites', period: 'H1', year: 2025, linkedTeamKRId: 'team-tech-kr-3', linkedOrgKRId: null },
-        { id: 'ind-6-kr-3', individualId: 'ind-6', title: 'Train facility IT staff on EMR maintenance', period: 'H2', year: 2025, linkedTeamKRId: 'team-tech-kr-2', linkedOrgKRId: null },
       ],
     },
     // Operations & Partnerships team
@@ -180,9 +149,6 @@ export const sampleData: OKRData = {
       teamId: 'team-ops',
       role: 'Grants Manager',
       keyResults: [
-        { id: 'ind-7-kr-1', individualId: 'ind-7', title: 'Submit 5 grant proposals to major donors', period: 'H1', year: 2025, linkedTeamKRId: 'team-ops-kr-1', linkedOrgKRId: null },
-        { id: 'ind-7-kr-2', individualId: 'ind-7', title: 'Secure 2 new multi-year partnerships', period: 'H2', year: 2025, linkedTeamKRId: 'team-ops-kr-1', linkedOrgKRId: null },
-        { id: 'ind-7-kr-3', individualId: 'ind-7', title: 'Develop impact measurement framework', period: 'H1', year: 2025, linkedTeamKRId: 'team-ops-kr-3', linkedOrgKRId: null },
       ],
     },
     {
@@ -191,9 +157,6 @@ export const sampleData: OKRData = {
       teamId: 'team-ops',
       role: 'HR & Admin Lead',
       keyResults: [
-        { id: 'ind-8-kr-1', individualId: 'ind-8', title: 'Implement staff wellness program', period: 'H1', year: 2025, linkedTeamKRId: 'team-ops-kr-2', linkedOrgKRId: null },
-        { id: 'ind-8-kr-2', individualId: 'ind-8', title: 'Conduct quarterly staff satisfaction surveys', period: 'H1', year: 2025, linkedTeamKRId: 'team-ops-kr-2', linkedOrgKRId: null },
-        { id: 'ind-8-kr-3', individualId: 'ind-8', title: 'Coordinate 3 research paper submissions', period: 'H2', year: 2025, linkedTeamKRId: 'team-ops-kr-3', linkedOrgKRId: null },
       ],
     },
   ],
