@@ -24,6 +24,27 @@ function getNodeLevel(type: GraphNode['type']): 'org' | 'team' | 'individual' {
   return 'individual';
 }
 
+// SVG icon paths for each hierarchy level (designed on a 24×24 viewBox, centered at origin)
+// Building icon for org nodes
+const ICON_ORG = 'M-8,-10 L-8,10 L-3,10 L-3,3 L3,3 L3,10 L8,10 L8,-4 L2,-4 L2,-10 Z M-5,-6 L-5,-3 L-2,-3 L-2,-6 Z M-5,0 L-5,3 L-2,3 L-2,0 Z M4,0 L4,3 L7,3 L7,0 Z';
+// Two-person group icon for team nodes
+const ICON_TEAM = 'M-5,-4 A3,3,0,1,1,1,-4 A3,3,0,1,1,-5,-4 Z M-6,1 A4,4,0,0,0,-7,5 L3,5 A4,4,0,0,0,2,1 Z M3,-5 A2.5,2.5,0,1,1,8,-5 A2.5,2.5,0,1,1,3,-5 Z M3,0 A3.5,3.5,0,0,0,2,4 L9,4 A3.5,3.5,0,0,0,8,0 Z';
+// Single person icon for individual nodes
+const ICON_PERSON = 'M-3,-6 A3,3,0,1,1,3,-6 A3,3,0,1,1,-3,-6 Z M-5,0 A5,5,0,0,0,-6,5 L6,5 A5,5,0,0,0,5,0 Z';
+
+// Scale factor per level so icons fit inside node circles
+const ICON_SCALE: Record<'org' | 'team' | 'individual', number> = {
+  org: 0.82,
+  team: 0.55,
+  individual: 0.42,
+};
+
+function getIconPath(level: 'org' | 'team' | 'individual'): string {
+  if (level === 'org') return ICON_ORG;
+  if (level === 'team') return ICON_TEAM;
+  return ICON_PERSON;
+}
+
 export default function NetworkGraph() {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -136,6 +157,7 @@ export default function NetworkGraph() {
       source: typeof l.source === 'string' ? l.source : l.source.id,
       target: typeof l.target === 'string' ? l.target : l.target.id,
       type: l.type,
+      relationship: l.relationship,
     }));
 
     // Compute max connection count for color intensity scaling
@@ -163,8 +185,10 @@ export default function NetworkGraph() {
 
     // Arrow markers
     const defs = svg.append('defs');
+
+    // Ownership arrow: filled triangle (slate)
     defs.append('marker')
-      .attr('id', 'arrowhead')
+      .attr('id', 'arrowhead-ownership')
       .attr('viewBox', '0 -5 10 10')
       .attr('refX', 20)
       .attr('refY', 0)
@@ -174,6 +198,21 @@ export default function NetworkGraph() {
       .append('path')
       .attr('d', 'M0,-5L10,0L0,5')
       .attr('fill', '#475569');
+
+    // Contribution arrow: open diamond (teal)
+    defs.append('marker')
+      .attr('id', 'arrowhead-contribution')
+      .attr('viewBox', '0 -6 12 12')
+      .attr('refX', 22)
+      .attr('refY', 0)
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M0,0L6,-5L12,0L6,5Z')
+      .attr('fill', 'none')
+      .attr('stroke', '#14B8A6')
+      .attr('stroke-width', 1.5);
 
     // Glow filter for high-connection nodes
     const filter = defs.append('filter').attr('id', 'glow');
@@ -205,16 +244,23 @@ export default function NetworkGraph() {
       .data(links)
       .join('line')
       .attr('stroke', (d) => {
+        if (d.relationship === 'contribution') return '#14B8A6'; // teal for contributions
+        // Ownership: subtle slate tones by hierarchy level
         if (d.type === 'org-to-team') return '#475569';
         if (d.type === 'team-to-individual') return '#334155';
         return '#3B82F6';
       })
-      .attr('stroke-opacity', 0.5)
+      .attr('stroke-opacity', (d) => d.relationship === 'contribution' ? 0.6 : 0.4)
       .attr('stroke-width', (d) => {
-        if (d.type === 'org-to-individual') return 2;
+        if (d.relationship === 'contribution') return 2;
         return 1.5;
       })
-      .attr('marker-end', 'url(#arrowhead)')
+      .attr('stroke-dasharray', (d) => d.relationship === 'contribution' ? '6,3' : 'none')
+      .attr('marker-end', (d) =>
+        d.relationship === 'contribution'
+          ? 'url(#arrowhead-contribution)'
+          : 'url(#arrowhead-ownership)'
+      )
       .style('transition', 'stroke-opacity 0.2s, stroke-width 0.2s');
 
     // Node groups
@@ -249,17 +295,43 @@ export default function NetworkGraph() {
       .attr('filter', (d) => d.connectionCount > 6 ? 'url(#glow)' : null)
       .style('transition', 'opacity 0.2s');
 
-    // Connection count badge for high-connection nodes
-    nodeSelection.filter((d) => d.connectionCount > 3)
-      .append('text')
-      .attr('class', 'node-badge')
-      .attr('text-anchor', 'middle')
-      .attr('dy', '0.35em')
-      .attr('font-size', () => 11) // fixed badge size
-      .attr('font-weight', '700')
+    // Icon overlay inside each node — differentiates org / team / individual
+    nodeSelection.append('path')
+      .attr('class', 'node-icon')
+      .attr('d', (d) => getIconPath(getNodeLevel(d.type)))
+      .attr('transform', (d) => {
+        const scale = ICON_SCALE[getNodeLevel(d.type)];
+        return `scale(${scale})`;
+      })
       .attr('fill', 'white')
+      .attr('fill-opacity', 0.9)
       .attr('pointer-events', 'none')
-      .text((d) => d.connectionCount);
+      .style('transition', 'opacity 0.2s');
+
+    // Connection count badge — positioned top-right as superscript to avoid icon overlap
+    nodeSelection.filter((d) => d.connectionCount > 3)
+      .append('g')
+      .attr('class', 'node-badge-group')
+      .attr('transform', (d) => {
+        const r = getNodeRadius(d);
+        const offset = r * 0.6;
+        return `translate(${offset},${-offset})`;
+      })
+      .each(function () {
+        d3.select(this).append('circle')
+          .attr('r', 7)
+          .attr('fill', '#1E293B')
+          .attr('stroke', '#475569')
+          .attr('stroke-width', 1);
+        d3.select(this).append('text')
+          .attr('text-anchor', 'middle')
+          .attr('dy', '0.35em')
+          .attr('font-size', 9)
+          .attr('font-weight', '700')
+          .attr('fill', 'white')
+          .attr('pointer-events', 'none')
+          .text((d) => (d as GraphNode).connectionCount);
+      });
 
     // Labels for org-level and individual nodes
     nodeSelection.filter((d) => d.type === 'org-objective' || d.type === 'org-kr' || d.type === 'individual')
@@ -314,6 +386,14 @@ export default function NetworkGraph() {
           return 0.2;
         });
 
+      // Dim non-connected icons
+      nodeSelection.select('.node-icon')
+        .attr('opacity', (n) => {
+          if (n.id === d.id) return 1;
+          if (neighbors.has(n.id)) return 1;
+          return 0.2;
+        });
+
       // Dim non-connected labels
       nodeSelection.select('.node-label')
         .attr('opacity', (n) => {
@@ -323,7 +403,7 @@ export default function NetworkGraph() {
         });
 
       // Dim non-connected badges
-      nodeSelection.select('.node-badge')
+      nodeSelection.select('.node-badge-group')
         .attr('opacity', (n) => {
           if (n.id === d.id) return 1;
           if (neighbors.has(n.id)) return 1;
@@ -389,13 +469,19 @@ export default function NetworkGraph() {
             n.id === selectedId || neighbors.has(n.id) ? 1 : 0.15
           );
 
+        nodeSelection.select('.node-icon')
+          .transition().duration(dur).ease(ease)
+          .attr('opacity', (n: GraphNode) =>
+            n.id === selectedId || neighbors.has(n.id) ? 1 : 0.15
+          );
+
         nodeSelection.select('.node-label')
           .transition().duration(dur).ease(ease)
           .attr('opacity', (n: GraphNode) =>
             n.id === selectedId || neighbors.has(n.id) ? 1 : 0.1
           );
 
-        nodeSelection.select('.node-badge')
+        nodeSelection.select('.node-badge-group')
           .transition().duration(dur).ease(ease)
           .attr('opacity', (n: GraphNode) =>
             n.id === selectedId || neighbors.has(n.id) ? 1 : 0.1
@@ -419,11 +505,15 @@ export default function NetworkGraph() {
           .transition().duration(dur).ease(ease)
           .attr('opacity', 1);
 
+        nodeSelection.select('.node-icon')
+          .transition().duration(dur).ease(ease)
+          .attr('opacity', 1);
+
         nodeSelection.select('.node-label')
           .transition().duration(dur).ease(ease)
           .attr('opacity', 1);
 
-        nodeSelection.select('.node-badge')
+        nodeSelection.select('.node-badge-group')
           .transition().duration(dur).ease(ease)
           .attr('opacity', 1);
 
