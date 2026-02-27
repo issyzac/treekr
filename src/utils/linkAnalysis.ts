@@ -30,7 +30,7 @@ export function buildGraph(data: OKRData): AnalysisResult {
         type: 'org-kr',
         connectionCount: 0,
       });
-      links.push({ source: obj.id, target: kr.id, type: 'org-to-team' });
+      links.push({ source: obj.id, target: kr.id, type: 'org-to-team', relationship: 'ownership' });
       incConnection(obj.id);
       incConnection(kr.id);
     }
@@ -57,12 +57,12 @@ export function buildGraph(data: OKRData): AnalysisResult {
           teamName: team.name,
           connectionCount: 0,
         });
-        links.push({ source: obj.id, target: kr.id, type: 'org-to-team' });
+        links.push({ source: obj.id, target: kr.id, type: 'org-to-team', relationship: 'ownership' });
         incConnection(obj.id);
         incConnection(kr.id);
 
         if (kr.linkedOrgKRId) {
-          links.push({ source: kr.id, target: kr.linkedOrgKRId, type: 'org-to-team' });
+          links.push({ source: kr.id, target: kr.linkedOrgKRId, type: 'org-to-team', relationship: 'contribution' });
           incConnection(kr.id);
           incConnection(kr.linkedOrgKRId);
         }
@@ -95,17 +95,17 @@ export function buildGraph(data: OKRData): AnalysisResult {
         connectionCount: 0,
       });
 
-      links.push({ source: person.id, target: kr.id, type: 'team-to-individual' });
+      links.push({ source: person.id, target: kr.id, type: 'team-to-individual', relationship: 'ownership' });
       incConnection(person.id);
       incConnection(kr.id);
 
       if (kr.linkedTeamKRId) {
-        links.push({ source: kr.id, target: kr.linkedTeamKRId, type: 'team-to-individual' });
+        links.push({ source: kr.id, target: kr.linkedTeamKRId, type: 'team-to-individual', relationship: 'contribution' });
         incConnection(kr.id);
         incConnection(kr.linkedTeamKRId);
       }
       if (kr.linkedOrgKRId) {
-        links.push({ source: kr.id, target: kr.linkedOrgKRId, type: 'org-to-individual' });
+        links.push({ source: kr.id, target: kr.linkedOrgKRId, type: 'org-to-individual', relationship: 'contribution' });
         incConnection(kr.id);
         incConnection(kr.linkedOrgKRId);
       }

@@ -78,6 +78,7 @@ export interface GraphLink {
   source: string | GraphNode;
   target: string | GraphNode;
   type: 'org-to-team' | 'team-to-individual' | 'org-to-individual';
+  relationship: 'ownership' | 'contribution';
 }
 
 export type ViewMode = 'network' | 'hierarchy' | 'matrix' | 'sankey';
