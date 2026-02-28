@@ -258,6 +258,7 @@ export default function OKREditorModal() {
                 teamId,
                 title: newObjectiveTitle.trim(),
                 keyResults: [],
+                linkedOrgKRIds: [],
             };
             dispatch({ type: 'ADD_TEAM_OBJECTIVE', payload: { teamId, objective: newObj } });
             objectiveId = newObj.id;

@@ -1,4 +1,4 @@
-import type { OKRData, GraphNode, GraphLink, Individual } from '../types/okr';
+import type { OKRData, GraphNode, GraphLink } from '../types/okr';
 
 /**
  * Given an individual's ID, compute the set of all node IDs in their

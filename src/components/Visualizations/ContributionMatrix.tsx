@@ -61,10 +61,10 @@ export default function ContributionMatrix() {
     // Compute highlight state
     const hasHighlight = isIndividualNode(data, filters.selectedNodeId);
     const highlightIds = hasHighlight
-      ? getIndividualHighlightIds(data, filters.selectedNodeId)
+      ? getIndividualHighlightIds(data, filters.selectedNodeId!)
       : null;
     const highlightRowIdx = hasHighlight
-      ? filteredIndividuals.findIndex((ind) => ind.id === filters.selectedNodeId)
+      ? filteredIndividuals.findIndex((ind) => ind.id === filters.selectedNodeId!)
       : -1;
     // Build set of org KR column indices that the highlighted individual contributes to
     const highlightCols = new Set<number>();

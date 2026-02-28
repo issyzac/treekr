@@ -43,6 +43,7 @@ export const sampleData: OKRData = {
           title: 'Strengthen primary healthcare in Kenya',
           keyResults: [
           ],
+          linkedOrgKRIds: [],
         },
       ],
     },
@@ -57,6 +58,7 @@ export const sampleData: OKRData = {
           title: 'Expand community health services in Tanzania',
           keyResults: [
           ],
+          linkedOrgKRIds: [],
         },
       ],
     },
@@ -71,6 +73,7 @@ export const sampleData: OKRData = {
           title: 'Build and deploy digital health solutions',
           keyResults: [
           ],
+          linkedOrgKRIds: [],
         },
       ],
     },
@@ -85,6 +88,7 @@ export const sampleData: OKRData = {
           title: 'Ensure organizational growth and sustainability',
           keyResults: [
           ],
+          linkedOrgKRIds: [],
         },
       ],
     },
