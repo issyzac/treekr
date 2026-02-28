@@ -1,4 +1,52 @@
-import type { OKRData, GraphNode, GraphLink } from '../types/okr';
+import type { OKRData, GraphNode, GraphLink, Individual } from '../types/okr';
+
+/**
+ * Given an individual's ID, compute the set of all node IDs in their
+ * contribution path: individual → individual KRs → team KRs → team objectives → org KRs → org objectives
+ */
+export function getIndividualHighlightIds(data: OKRData, individualId: string): Set<string> {
+  const ids = new Set<string>();
+  const person = data.individuals.find((p) => p.id === individualId);
+  if (!person) return ids;
+
+  ids.add(person.id);
+
+  for (const ikr of person.keyResults) {
+    ids.add(ikr.id);
+
+    if (ikr.linkedTeamKRId) {
+      ids.add(ikr.linkedTeamKRId);
+
+      // Find the team objective that owns this team KR
+      for (const team of data.teams) {
+        for (const tobj of team.objectives) {
+          const hasTeamKR = tobj.keyResults.some((tkr) => tkr.id === ikr.linkedTeamKRId);
+          if (hasTeamKR) {
+            ids.add(tobj.id);
+            // Follow up to org KRs and their parent objectives
+            for (const orgKRId of tobj.linkedOrgKRIds) {
+              ids.add(orgKRId);
+              const parentObj = data.orgObjectives.find((o) =>
+                o.keyResults.some((kr) => kr.id === orgKRId)
+              );
+              if (parentObj) ids.add(parentObj.id);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return ids;
+}
+
+/**
+ * Check whether a selectedNodeId refers to an individual
+ */
+export function isIndividualNode(data: OKRData, nodeId: string | null): nodeId is string {
+  if (!nodeId) return false;
+  return data.individuals.some((p) => p.id === nodeId);
+}
 
 export interface AnalysisResult {
   nodes: GraphNode[];
