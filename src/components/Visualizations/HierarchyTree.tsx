@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { useOKR } from '../../context/OKRContext';
 import { getTeamColor } from '../../utils/colors';
+import { getIndividualHighlightIds, isIndividualNode } from '../../utils/linkAnalysis';
 
 interface TreeNode {
   name: string;
@@ -98,6 +99,12 @@ export default function HierarchyTree() {
     svg.call(zoom);
     svg.call(zoom.transform, d3.zoomIdentity.translate(120, 40).scale(0.8));
 
+    // Compute highlight set
+    const hasHighlight = isIndividualNode(data, filters.selectedNodeId);
+    const highlightIds = hasHighlight
+      ? getIndividualHighlightIds(data, filters.selectedNodeId)
+      : null;
+
     // Links
     g.selectAll('path.link')
       .data(hierarchy.links())
@@ -112,8 +119,14 @@ export default function HierarchyTree() {
         if (target.teamId) return getTeamColor(target.teamId);
         return '#334155';
       })
-      .attr('stroke-width', 1.5)
-      .attr('stroke-opacity', 0.5);
+      .attr('stroke-width', (d) => {
+        if (highlightIds && highlightIds.has(d.source.data.id) && highlightIds.has(d.target.data.id)) return 2.5;
+        return 1.5;
+      })
+      .attr('stroke-opacity', (d) => {
+        if (!highlightIds) return 0.5;
+        return highlightIds.has(d.source.data.id) && highlightIds.has(d.target.data.id) ? 0.9 : 0.08;
+      });
 
     // Nodes
     const nodeG = g.selectAll<SVGGElement, d3.HierarchyPointNode<TreeNode>>('g.node')
@@ -121,7 +134,11 @@ export default function HierarchyTree() {
       .join('g')
       .attr('class', 'node')
       .attr('transform', (d) => `translate(${d.y},${d.x})`)
-      .attr('cursor', 'pointer');
+      .attr('cursor', 'pointer')
+      .attr('opacity', (d) => {
+        if (!highlightIds) return 1;
+        return highlightIds.has(d.data.id) || d.data.type === 'root' ? 1 : 0.12;
+      });
 
     nodeG.append('circle')
       .attr('r', (d) => {
