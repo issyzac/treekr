@@ -95,7 +95,7 @@ export default function SankeyFlow() {
     // Compute highlight set
     const hasHighlight = isIndividualNode(data, filters.selectedNodeId);
     const highlightIds = hasHighlight
-      ? getIndividualHighlightIds(data, filters.selectedNodeId)
+      ? getIndividualHighlightIds(data, filters.selectedNodeId!)
       : null;
 
     try {
