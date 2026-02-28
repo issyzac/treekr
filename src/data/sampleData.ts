@@ -91,6 +91,7 @@ export const sampleData: OKRData = {
           id: 'team-tz-obj-1',
           teamId: 'team-tz',
           title: 'Deepen impact by implementing new health areas',
+          linkedOrgKRIds: ['org-kr-1'],
           keyResults: [
             {
               id: 'team-tz-kr-1',
@@ -98,7 +99,6 @@ export const sampleData: OKRData = {
               teamId: 'team-tz',
               title:
                 'The national digital community health system (Afya Jamii) platform is expanded to support community-based diabetes and hypertension services by Q4 2026',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-tz-kr-2',
@@ -106,7 +106,6 @@ export const sampleData: OKRData = {
               teamId: 'team-tz',
               title:
                 'Health workers (CHWs and ADDO dispensers) utilize the newly developed NCD digital tools to serve at least 2,700 people with NCD care by October 2026',
-              linkedOrgKRId: 'org-kr-1',
             },
           ],
         },
@@ -114,6 +113,7 @@ export const sampleData: OKRData = {
           id: 'team-tz-obj-2',
           teamId: 'team-tz',
           title: 'Enable Continuum-of-Care (CoC) to drive health impact',
+          linkedOrgKRIds: ['org-kr-1'],
           keyResults: [
             {
               id: 'team-tz-kr-3',
@@ -121,7 +121,6 @@ export const sampleData: OKRData = {
               teamId: 'team-tz',
               title:
                 'The national digital community health system (Afya Jamii) and primary health facility system (GOTHOMIS) are technically integrated and operational — can document and support patient journeys for NCD/RMNCH use cases between the systems — by Q4 2026',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-tz-kr-4',
@@ -129,7 +128,6 @@ export const sampleData: OKRData = {
               teamId: 'team-tz',
               title:
                 '80% of individuals referred from the community (CHWs and ADDOs) to the health facility for follow-up of RMNCH and NCD-related services access the relevant health services by October 2026',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-tz-kr-5',
@@ -137,7 +135,6 @@ export const sampleData: OKRData = {
               teamId: 'team-tz',
               title:
                 'Design for a collaborative care model for diabetes and hypertension and learnings to inform integration are completed by end of Q2, and implementation is initiated in select health facilities and CHWs by end of Q4',
-              linkedOrgKRId: 'org-kr-1',
             },
           ],
         },
@@ -145,6 +142,7 @@ export const sampleData: OKRData = {
           id: 'team-tz-obj-3',
           teamId: 'team-tz',
           title: 'Secure funding for D-tree\'s long-term impact',
+          linkedOrgKRIds: ['org-kr-4'],
           keyResults: [
             {
               id: 'team-tz-kr-6',
@@ -152,7 +150,6 @@ export const sampleData: OKRData = {
               teamId: 'team-tz',
               title:
                 '$1.5 million is raised by Q3 2026 ($1M by Q2) to improve coordinated care and quality of care in Tanzanian community and facility settings',
-              linkedOrgKRId: 'org-kr-4',
             },
           ],
         },
@@ -170,6 +167,7 @@ export const sampleData: OKRData = {
           teamId: 'team-znz',
           title:
             'Demonstrate a high-quality, evidence-driven Continuum of Care model underpinned by a stable Jamii ni Afya system, positioning Zanzibar as an investable example of digitally enabled primary health care integration',
+          linkedOrgKRIds: ['org-kr-1', 'org-kr-3'],
           keyResults: [
             {
               id: 'team-znz-kr-1',
@@ -177,7 +175,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'By Q4 2026, the pneumonia Continuum of Care workflow is operational in one district hospital and associated PHC facilities, used by ~60 CHWs, with ≥75% referral completion or documented case follow-up and bi-directional digital data flow functioning between community and facility levels',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-znz-kr-2',
@@ -185,7 +182,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'By Q4 2026, Jamii ni Afya demonstrates stable routine use across Zanzibar, with graduated CHWs maintaining ≥90% monthly data syncing, ensuring reliable visibility of community-level service delivery',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-znz-kr-3',
@@ -193,7 +189,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'By Q2 2026, a Continuum of Care baseline assessment is completed informing the pediatric pneumonia care journey, generating the foundational evidence required to initiate a robust evaluation in 2027',
-              linkedOrgKRId: 'org-kr-3',
             },
           ],
         },
@@ -202,6 +197,7 @@ export const sampleData: OKRData = {
           teamId: 'team-znz',
           title:
             'Strategically leverage innovation to position Zanzibar as a launchpad for D-tree, demonstrating high-learning initiatives and actionable concepts',
+          linkedOrgKRIds: ['org-kr-1', 'org-kr-5'],
           keyResults: [
             {
               id: 'team-znz-kr-4',
@@ -209,7 +205,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'By Q4 2026, at least one high-learning innovation initiative is actively implemented in Zanzibar, with documented processes, evidence, and actionable insights demonstrating feasibility and potential applicability in other geographies',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-znz-kr-5',
@@ -217,7 +212,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'By Q2 2026, at least two Zanzibar innovation concepts leveraging Jamii ni Afya or addressing gaps in the digital health ecosystem are actively included and advanced in the organizational business development pipeline through Q4 2026',
-              linkedOrgKRId: 'org-kr-5',
             },
           ],
         },
@@ -226,6 +220,7 @@ export const sampleData: OKRData = {
           teamId: 'team-znz',
           title:
             'Zanzibar demonstrates agility, technical excellence, and trusted execution in delivering strategic priorities, generating evidence, and deploying unrestricted funding effectively',
+          linkedOrgKRIds: ['org-kr-7', 'org-kr-3'],
           keyResults: [
             {
               id: 'team-znz-kr-6',
@@ -233,7 +228,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'By end of Q4 2026, Zanzibar staff demonstrate effective and pro-active collaboration with regional support roles, implementing actionable recommendations from the mid-year review to strengthen strategic execution, operational effectiveness, and responsiveness',
-              linkedOrgKRId: 'org-kr-7',
             },
             {
               id: 'team-znz-kr-7',
@@ -241,7 +235,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'By end of 2026, Zanzibar has implemented its approved internal concept note for unrestricted funding across CoC, innovation, and evidence priorities, with an internal assessment rating the implementation as positive based on timeliness, strategic alignment, and learning captured',
-              linkedOrgKRId: 'org-kr-7',
             },
             {
               id: 'team-znz-kr-8',
@@ -249,7 +242,6 @@ export const sampleData: OKRData = {
               teamId: 'team-znz',
               title:
                 'Throughout 2026, Zanzibar consistently contributes timely, high-quality data to the organizational quarterly impact measurement framework and convenes regular reflection and analysis meetings to inform strategic decision-making',
-              linkedOrgKRId: 'org-kr-3',
             },
           ],
         },
@@ -266,6 +258,7 @@ export const sampleData: OKRData = {
           id: 'team-pu-obj-1',
           teamId: 'team-pu',
           title: 'Expand from community into facility and direct-to-client care',
+          linkedOrgKRIds: ['org-kr-1', 'org-kr-3', 'org-kr-5'],
           keyResults: [
             {
               id: 'team-pu-kr-1',
@@ -273,7 +266,6 @@ export const sampleData: OKRData = {
               teamId: 'team-pu',
               title:
                 'Scalable digital systems that document and support patient journeys for new health services between community and facility care settings are operational in Tanzania and Zanzibar by 2026, and plans approved for Malawi to achieve this in 2027',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-pu-kr-2',
@@ -281,7 +273,6 @@ export const sampleData: OKRData = {
               teamId: 'team-pu',
               title:
                 'A robust evaluation of a Continuum of Care program is underway by end of 2026',
-              linkedOrgKRId: 'org-kr-3',
             },
             {
               id: 'team-pu-kr-3',
@@ -289,7 +280,6 @@ export const sampleData: OKRData = {
               teamId: 'team-pu',
               title:
                 'At least 10 strong concepts/proposals submitted to funders with requests for funding that would expand CoC work by end of 2026, with concept leadership, guidance, or significant contributions by Program Unit member(s)',
-              linkedOrgKRId: 'org-kr-5',
             },
           ],
         },
@@ -297,6 +287,7 @@ export const sampleData: OKRData = {
           id: 'team-pu-obj-2',
           teamId: 'team-pu',
           title: 'Deepen our impact and generate evidence',
+          linkedOrgKRIds: ['org-kr-1', 'org-kr-7', 'org-kr-3'],
           keyResults: [
             {
               id: 'team-pu-kr-4',
@@ -304,7 +295,6 @@ export const sampleData: OKRData = {
               teamId: 'team-pu',
               title:
                 'D-tree is on track to integrate at least one new health area (e.g. NCD, mental health) into national digital health platforms — to strengthen service delivery — in Tanzania, Zanzibar, and/or Malawi by Q4',
-              linkedOrgKRId: 'org-kr-1',
             },
             {
               id: 'team-pu-kr-5',
@@ -312,7 +302,6 @@ export const sampleData: OKRData = {
               teamId: 'team-pu',
               title:
                 'All CoC country initiatives (Tanzania, Zanzibar, Malawi) show evidence by Q4 of government integration and engagement that supports future ownership pathway (e.g. aligned with national plans, government participation in design/implementation, early discussions about sustainability)',
-              linkedOrgKRId: 'org-kr-7',
             },
             {
               id: 'team-pu-kr-6',
@@ -320,7 +309,6 @@ export const sampleData: OKRData = {
               teamId: 'team-pu',
               title:
                 'Quarterly reporting system for global impact indicators is implemented and data is reliably available for external communications and triggering actions for continuous quality improvement by April 2026, with automated dashboards functional and useful by Q2',
-              linkedOrgKRId: 'org-kr-3',
             },
             {
               id: 'team-pu-kr-7',
@@ -328,7 +316,6 @@ export const sampleData: OKRData = {
               teamId: 'team-pu',
               title:
                 'We are on track to meet 2026 Global Program Indicators annual targets, as assessed after Q3',
-              linkedOrgKRId: 'org-kr-3',
             },
           ],
         },
@@ -358,7 +345,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-5',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-hannah-kr-2',
@@ -368,7 +354,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-3',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-hannah-kr-3',
@@ -378,7 +363,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-4',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -398,7 +382,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-1',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-jimmy-kr-2',
@@ -408,7 +391,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-7',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-jimmy-kr-3',
@@ -418,7 +400,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-6',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -438,7 +419,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-2',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-halima-kr-2',
@@ -448,7 +428,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-2',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-halima-kr-3',
@@ -458,7 +437,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-1',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -478,7 +456,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-6',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-stephen-m-kr-2',
@@ -488,7 +465,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-1',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-stephen-m-kr-3',
@@ -498,7 +474,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-8',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -518,7 +493,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-8',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-imran-kr-2',
@@ -528,7 +502,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-2',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-imran-kr-3',
@@ -538,7 +511,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-2',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -558,7 +530,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-6',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-mohamed-kr-2',
@@ -568,7 +539,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-6',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-mohamed-kr-3',
@@ -578,7 +548,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-2',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-mohamed-kr-4',
@@ -588,7 +557,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-7',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -608,7 +576,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-8',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-aisha-kr-2',
@@ -618,7 +585,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-8',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-aisha-kr-3',
@@ -628,7 +594,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-6',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -648,7 +613,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-1',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-abbas-kr-2',
@@ -658,7 +622,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-3',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-abbas-kr-3',
@@ -668,7 +631,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-3',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-abbas-kr-4',
@@ -678,7 +640,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-4',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -698,7 +659,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-2',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-lucy-kr-2',
@@ -708,7 +668,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-6',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-lucy-kr-3',
@@ -718,7 +677,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-2',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -738,7 +696,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-4',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-stephen-a-kr-2',
@@ -748,7 +705,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-4',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-stephen-a-kr-3',
@@ -758,7 +714,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-6',
-          linkedOrgKRId: null,
         },
       ],
     },
@@ -778,7 +733,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-7',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-radhia-kr-2',
@@ -788,7 +742,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-7',
-          linkedOrgKRId: null,
         },
         {
           id: 'ind-radhia-kr-3',
@@ -798,7 +751,6 @@ export const sampleData: OKRData = {
           period: 'H1',
           year: 2026,
           linkedTeamKRId: 'team-znz-kr-7',
-          linkedOrgKRId: null,
         },
       ],
     },

@@ -15,7 +15,7 @@ export default function DetailPanel() {
   const orgKR = data.orgObjectives.flatMap((o) => o.keyResults).find((kr) => kr.id === nodeId);
   const individual = data.individuals.find((p) => p.id === nodeId);
 
-  let teamKR: { kr: { id: string; title: string; linkedOrgKRId: string | null }; teamName: string; teamId: string } | null = null;
+  let teamKR: { kr: { id: string; title: string }; teamName: string; teamId: string } | null = null;
   for (const t of data.teams) {
     for (const obj of t.objectives) {
       for (const kr of obj.keyResults) {
@@ -56,19 +56,22 @@ export default function DetailPanel() {
 function OrgObjectiveDetail({ obj, data, dispatch }: { obj: OrgObjective; data: OKRData; dispatch: Dispatch }) {
   const contributors = new Set<string>();
   for (const kr of obj.keyResults) {
+    // Find team objectives that link to this org KR
+    const linkedTeamKRIds = new Set<string>();
+    for (const team of data.teams) {
+      for (const tobj of team.objectives) {
+        if (tobj.linkedOrgKRIds.includes(kr.id)) {
+          for (const tkr of tobj.keyResults) {
+            linkedTeamKRIds.add(tkr.id);
+          }
+        }
+      }
+    }
+    // Find individuals whose KRs link to those team KRs
     for (const person of data.individuals) {
       for (const ikr of person.keyResults) {
-        if (ikr.linkedOrgKRId === kr.id) contributors.add(person.id);
-        if (ikr.linkedTeamKRId) {
-          for (const team of data.teams) {
-            for (const tobj of team.objectives) {
-              for (const tkr of tobj.keyResults) {
-                if (tkr.id === ikr.linkedTeamKRId && tkr.linkedOrgKRId === kr.id) {
-                  contributors.add(person.id);
-                }
-              }
-            }
-          }
+        if (ikr.linkedTeamKRId && linkedTeamKRIds.has(ikr.linkedTeamKRId)) {
+          contributors.add(person.id);
         }
       }
     }
@@ -117,8 +120,8 @@ function OrgKRDetail({ kr, data, dispatch }: { kr: { id: string; objectiveId: st
   const linkedTeamKRs: { kr: { id: string; title: string }; teamName: string; teamId: string }[] = [];
   for (const team of data.teams) {
     for (const obj of team.objectives) {
-      for (const tkr of obj.keyResults) {
-        if (tkr.linkedOrgKRId === kr.id) {
+      if (obj.linkedOrgKRIds.includes(kr.id)) {
+        for (const tkr of obj.keyResults) {
           linkedTeamKRs.push({ kr: tkr, teamName: team.name, teamId: team.id });
         }
       }
@@ -128,7 +131,6 @@ function OrgKRDetail({ kr, data, dispatch }: { kr: { id: string; objectiveId: st
   const contributors: { person: Individual; krs: Individual['keyResults'] }[] = [];
   for (const person of data.individuals) {
     const relevantKRs = person.keyResults.filter((ikr) => {
-      if (ikr.linkedOrgKRId === kr.id) return true;
       return linkedTeamKRs.some((tkr) => ikr.linkedTeamKRId === tkr.kr.id);
     });
     if (relevantKRs.length > 0) {
@@ -188,13 +190,13 @@ function IndividualDetail({ person, data, dispatch }: { person: Individual; data
 
   const linkedOrgKRIds = new Set<string>();
   for (const ikr of person.keyResults) {
-    if (ikr.linkedOrgKRId) linkedOrgKRIds.add(ikr.linkedOrgKRId);
     if (ikr.linkedTeamKRId) {
       for (const t of data.teams) {
         for (const obj of t.objectives) {
-          for (const tkr of obj.keyResults) {
-            if (tkr.id === ikr.linkedTeamKRId && tkr.linkedOrgKRId) {
-              linkedOrgKRIds.add(tkr.linkedOrgKRId);
+          const hasTeamKR = obj.keyResults.some((tkr) => tkr.id === ikr.linkedTeamKRId);
+          if (hasTeamKR) {
+            for (const orgKRId of obj.linkedOrgKRIds) {
+              linkedOrgKRIds.add(orgKRId);
             }
           }
         }
@@ -263,10 +265,20 @@ function IndividualDetail({ person, data, dispatch }: { person: Individual; data
   );
 }
 
-function TeamKRDetail({ tkr, data, dispatch }: { tkr: { kr: { id: string; title: string; linkedOrgKRId: string | null }; teamName: string; teamId: string }; data: OKRData; dispatch: Dispatch }) {
-  const linkedOrgKR = tkr.kr.linkedOrgKRId
-    ? data.orgObjectives.flatMap((o) => o.keyResults).find((kr) => kr.id === tkr.kr.linkedOrgKRId)
-    : null;
+function TeamKRDetail({ tkr, data, dispatch }: { tkr: { kr: { id: string; title: string }; teamName: string; teamId: string }; data: OKRData; dispatch: Dispatch }) {
+  // Find org KRs via the parent team objective's linkedOrgKRIds
+  const linkedOrgKRs: { id: string; title: string }[] = [];
+  for (const team of data.teams) {
+    for (const obj of team.objectives) {
+      const hasThisKR = obj.keyResults.some((kr) => kr.id === tkr.kr.id);
+      if (hasThisKR) {
+        for (const orgKRId of obj.linkedOrgKRIds) {
+          const orgKR = data.orgObjectives.flatMap((o) => o.keyResults).find((kr) => kr.id === orgKRId);
+          if (orgKR) linkedOrgKRs.push(orgKR);
+        }
+      }
+    }
+  }
 
   const contributors = data.individuals.filter((p) =>
     p.keyResults.some((ikr) => ikr.linkedTeamKRId === tkr.kr.id)
@@ -281,12 +293,14 @@ function TeamKRDetail({ tkr, data, dispatch }: { tkr: { kr: { id: string; title:
       <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 12 }}>
         Team: <strong>{tkr.teamName}</strong>
       </div>
-      {linkedOrgKR && (
+      {linkedOrgKRs.length > 0 && (
         <div className="detail-section">
-          <div className="detail-section-title">Feeds into Org KR</div>
-          <div className="detail-link-item" onClick={() => dispatch({ type: 'SET_SELECTED_NODE', payload: linkedOrgKR.id })}>
-            {linkedOrgKR.title}
-          </div>
+          <div className="detail-section-title">Feeds into Org KRs ({linkedOrgKRs.length})</div>
+          {linkedOrgKRs.map((orgKR) => (
+            <div key={orgKR.id} className="detail-link-item" onClick={() => dispatch({ type: 'SET_SELECTED_NODE', payload: orgKR.id })}>
+              {orgKR.title}
+            </div>
+          ))}
         </div>
       )}
       <div className="detail-section">
@@ -301,7 +315,7 @@ function TeamKRDetail({ tkr, data, dispatch }: { tkr: { kr: { id: string; title:
   );
 }
 
-function IndKRDetail({ ikr, data, dispatch }: { ikr: { id: string; title: string; personName: string; teamId: string; linkedTeamKRId: string | null; linkedOrgKRId: string | null; period: string }; data: OKRData; dispatch: Dispatch }) {
+function IndKRDetail({ ikr, data, dispatch }: { ikr: { id: string; title: string; personName: string; teamId: string; linkedTeamKRId: string | null; period: string }; data: OKRData; dispatch: Dispatch }) {
   return (
     <>
       <span className="detail-type-badge" style={{ backgroundColor: getTeamColor(ikr.teamId), color: 'white' }}>

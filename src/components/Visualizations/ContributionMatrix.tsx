@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { useOKR } from '../../context/OKRContext';
-import { getContributionMatrix } from '../../utils/linkAnalysis';
+import { getContributionMatrix, getIndividualHighlightIds, isIndividualNode } from '../../utils/linkAnalysis';
 import { getTeamColor } from '../../utils/colors';
 
 export default function ContributionMatrix() {
@@ -58,6 +58,22 @@ export default function ContributionMatrix() {
     const maxVal = d3.max(filteredMatrix.flat()) || 1;
     const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0, maxVal + 0.5]);
 
+    // Compute highlight state
+    const hasHighlight = isIndividualNode(data, filters.selectedNodeId);
+    const highlightIds = hasHighlight
+      ? getIndividualHighlightIds(data, filters.selectedNodeId)
+      : null;
+    const highlightRowIdx = hasHighlight
+      ? filteredIndividuals.findIndex((ind) => ind.id === filters.selectedNodeId)
+      : -1;
+    // Build set of org KR column indices that the highlighted individual contributes to
+    const highlightCols = new Set<number>();
+    if (highlightIds) {
+      orgKRs.forEach((kr, col) => {
+        if (highlightIds.has(kr.id)) highlightCols.add(col);
+      });
+    }
+
     // Row labels (individuals)
     g.selectAll('text.row-label')
       .data(filteredIndividuals)
@@ -68,8 +84,12 @@ export default function ContributionMatrix() {
       .attr('text-anchor', 'end')
       .attr('dominant-baseline', 'middle')
       .attr('font-size', 12)
-      .attr('font-weight', 500)
+      .attr('font-weight', (_, i) => highlightRowIdx === i ? 700 : 500)
       .attr('fill', '#222222')
+      .attr('opacity', (_, i) => {
+        if (!highlightIds) return 1;
+        return i === highlightRowIdx ? 1 : 0.15;
+      })
       .text((d) => d.name);
 
     // Team color indicators
@@ -82,7 +102,11 @@ export default function ContributionMatrix() {
       .attr('width', 3)
       .attr('height', clampedCellSize - 4)
       .attr('rx', 1.5)
-      .attr('fill', (d) => getTeamColor(d.teamId));
+      .attr('fill', (d) => getTeamColor(d.teamId))
+      .attr('opacity', (_, i) => {
+        if (!highlightIds) return 1;
+        return i === highlightRowIdx ? 1 : 0.15;
+      });
 
     // Column labels (org KRs)
     g.selectAll('text.col-label')
@@ -96,8 +120,12 @@ export default function ContributionMatrix() {
       )
       .attr('text-anchor', 'start')
       .attr('font-size', 11)
-      .attr('font-weight', 500)
+      .attr('font-weight', (_, i) => highlightCols.has(i) ? 700 : 500)
       .attr('fill', '#616161')
+      .attr('opacity', (_, i) => {
+        if (!highlightIds) return 1;
+        return highlightCols.has(i) ? 1 : 0.15;
+      })
       .text((d) => d.title.length > 35 ? d.title.slice(0, 35) + '...' : d.title);
 
     // Cells
@@ -106,6 +134,9 @@ export default function ContributionMatrix() {
     for (let row = 0; row < filteredMatrix.length; row++) {
       for (let col = 0; col < orgKRs.length; col++) {
         const value = filteredMatrix[row][col];
+        const isHighlightedCell = highlightIds && row === highlightRowIdx && highlightCols.has(col);
+        const isDimmed = highlightIds && !isHighlightedCell;
+
         const rect = g.append('rect')
           .attr('x', margin.left + col * clampedCellSize + 1)
           .attr('y', margin.top + row * clampedCellSize + 1)
@@ -113,8 +144,9 @@ export default function ContributionMatrix() {
           .attr('height', clampedCellSize - 2)
           .attr('rx', 4)
           .attr('fill', value > 0 ? colorScale(value) : '#1E293B')
-          .attr('stroke', value > 0 ? '#3B82F6' : '#334155')
-          .attr('stroke-width', value > 0 ? 1 : 0.5)
+          .attr('stroke', isHighlightedCell ? '#F59E0B' : value > 0 ? '#3B82F6' : '#334155')
+          .attr('stroke-width', isHighlightedCell ? 2.5 : value > 0 ? 1 : 0.5)
+          .attr('opacity', isDimmed ? 0.1 : 1)
           .attr('cursor', 'pointer');
 
         if (value > 0) {
@@ -127,6 +159,7 @@ export default function ContributionMatrix() {
             .attr('font-weight', 700)
             .attr('fill', value > maxVal / 2 ? 'white' : '#222222')
             .attr('pointer-events', 'none')
+            .attr('opacity', isDimmed ? 0.1 : 1)
             .text(value);
         }
 
@@ -146,9 +179,10 @@ export default function ContributionMatrix() {
           })
           .on('mouseout', () => tooltip.style('display', 'none'))
           .on('click', () => {
+            const id = filteredIndividuals[row].id;
             dispatch({
               type: 'SET_SELECTED_NODE',
-              payload: filteredIndividuals[row].id,
+              payload: filters.selectedNodeId === id ? null : id,
             });
           });
       }

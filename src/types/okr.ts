@@ -21,6 +21,7 @@ export interface TeamObjective {
   id: string;
   teamId: string;
   title: string;
+  linkedOrgKRIds: string[];
   keyResults: TeamKeyResult[];
 }
 
@@ -29,7 +30,6 @@ export interface TeamKeyResult {
   objectiveId: string;
   teamId: string;
   title: string;
-  linkedOrgKRId: string | null;
 }
 
 export interface Individual {
@@ -47,7 +47,6 @@ export interface IndividualKeyResult {
   period: 'H1' | 'H2';
   year: number;
   linkedTeamKRId: string | null;
-  linkedOrgKRId: string | null;
 }
 
 export interface OKRData {

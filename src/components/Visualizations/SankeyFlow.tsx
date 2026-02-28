@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import { sankey, sankeyLinkHorizontal } from 'd3-sankey';
 import type { SankeyNode, SankeyLink } from 'd3-sankey';
 import { useOKR } from '../../context/OKRContext';
-import { getSankeyData } from '../../utils/linkAnalysis';
+import { getSankeyData, getIndividualHighlightIds, isIndividualNode } from '../../utils/linkAnalysis';
 import { getTeamColor } from '../../utils/colors';
 
 interface SNode {
@@ -92,6 +92,12 @@ export default function SankeyFlow() {
         [width - margin.right, height - margin.bottom],
       ]);
 
+    // Compute highlight set
+    const hasHighlight = isIndividualNode(data, filters.selectedNodeId);
+    const highlightIds = hasHighlight
+      ? getIndividualHighlightIds(data, filters.selectedNodeId)
+      : null;
+
     try {
       const graph = sankeyLayout({
         nodes: sankeyNodes as unknown as SankeyNode<SNode, SLink>[],
@@ -115,7 +121,12 @@ export default function SankeyFlow() {
           return '#475569';
         })
         .attr('stroke-width', (d) => Math.max(1, d.width || 1))
-        .attr('stroke-opacity', 0.35)
+        .attr('stroke-opacity', (d) => {
+          if (!highlightIds) return 0.35;
+          const sId = (d.source as SankeyNode<SNode, SLink> & SNode).id;
+          const tId = (d.target as SankeyNode<SNode, SLink> & SNode).id;
+          return highlightIds.has(sId) && highlightIds.has(tId) ? 0.8 : 0.05;
+        })
         .on('mouseover', (event, d) => {
           d3.select(event.currentTarget).attr('stroke-opacity', 0.7);
           const sNode = d.source as SankeyNode<SNode, SLink> & SNode;
@@ -129,8 +140,13 @@ export default function SankeyFlow() {
               <div style="color:#3B82F6;margin-top:4px">${d.value} contributing KR${d.value !== 1 ? 's' : ''}</div>
             `);
         })
-        .on('mouseout', (event) => {
-          d3.select(event.currentTarget).attr('stroke-opacity', 0.35);
+        .on('mouseout', (event, d) => {
+          const sId = (d.source as SankeyNode<SNode, SLink> & SNode).id;
+          const tId = (d.target as SankeyNode<SNode, SLink> & SNode).id;
+          const baseOpacity = highlightIds
+            ? (highlightIds.has(sId) && highlightIds.has(tId) ? 0.8 : 0.05)
+            : 0.35;
+          d3.select(event.currentTarget).attr('stroke-opacity', baseOpacity);
           tooltip.style('display', 'none');
         });
 
@@ -152,6 +168,10 @@ export default function SankeyFlow() {
         })
         .attr('stroke', '#1E293B')
         .attr('stroke-width', 1)
+        .attr('opacity', (d) => {
+          if (!highlightIds) return 1;
+          return highlightIds.has((d as unknown as SNode).id) ? 1 : 0.12;
+        })
         .attr('cursor', 'pointer');
 
       nodeRects.on('mouseover', (event, d) => {
@@ -168,7 +188,10 @@ export default function SankeyFlow() {
         .on('mouseout', () => tooltip.style('display', 'none'))
         .on('click', (_event, d) => {
           const n = d as unknown as SNode;
-          dispatch({ type: 'SET_SELECTED_NODE', payload: n.id });
+          dispatch({
+            type: 'SET_SELECTED_NODE',
+            payload: filters.selectedNodeId === n.id ? null : n.id,
+          });
         });
 
       // Node labels
@@ -178,21 +201,28 @@ export default function SankeyFlow() {
         .join('text')
         .attr('x', (d) => {
           const n = d as unknown as SNode;
-          return n.layer === 2 ? (d.x1 || 0) + 6 : (d.x0 || 0) - 6;
+          return n.layer === 0 ? (d.x1 || 0) + 6 : (d.x0 || 0) - 6;
         })
         .attr('y', (d) => ((d.y0 || 0) + (d.y1 || 0)) / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', (d) => {
           const n = d as unknown as SNode;
-          return n.layer === 2 ? 'start' : 'end';
+          return n.layer === 0 ? 'start' : 'end';
         })
         .attr('font-size', 11)
-        .attr('font-weight', 500)
+        .attr('font-weight', (d) => {
+          if (!highlightIds) return 500;
+          return highlightIds.has((d as unknown as SNode).id) ? 700 : 500;
+        })
         .attr('fill', '#222222')
         .attr('stroke', '#F9F9F9')
         .attr('stroke-width', 3)
         .attr('stroke-linejoin', 'round')
         .attr('paint-order', 'stroke fill')
+        .attr('opacity', (d) => {
+          if (!highlightIds) return 1;
+          return highlightIds.has((d as unknown as SNode).id) ? 1 : 0.12;
+        })
         .text((d) => {
           const n = d as unknown as SNode;
           const maxLen = 35;
@@ -201,9 +231,9 @@ export default function SankeyFlow() {
 
       // Layer labels
       const layers = [
-        { x: margin.left, label: 'Org Key Results' },
+        { x: margin.left, label: 'Individuals' },
         { x: width / 2, label: 'Team Key Results' },
-        { x: width - margin.right, label: 'Individuals' },
+        { x: width - margin.right, label: 'Org Key Results' },
       ];
       layers.forEach((l) => {
         g.append('text')
@@ -226,7 +256,7 @@ export default function SankeyFlow() {
         .text('Unable to render flow diagram with current data');
     }
 
-  }, [data, filters.selectedTeams, dispatch]);
+  }, [data, filters.selectedTeams, filters.selectedNodeId, dispatch]);
 
   return (
     <>
